@@ -13,7 +13,7 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Fuse from "fuse.js";
-import { Product } from "@/types";
+// import { Product } from "@/types";
 
 interface ProductSearchInfo {
   ID: string;
@@ -145,12 +145,11 @@ function SearchInput() {
             aria-expanded={open}
             className="w-[200px] justify-between"
           ></Button> */}
-          <div className="flex items-center w-2xl bg-background border border-slate-800 rounded-lg shadow-lg transition-all">
+          <div className="flex items-center md:w-2xl bg-background border border-slate-800 rounded-lg shadow-lg transition-all">
             <span className="pl-4 pr-2">
               <Search className="h-5 w-5 text-slate-500" />
             </span>
             <Input
-              // ref={inputRef}
               type="text"
               placeholder="Search for products or vendors..."
               value={query}
@@ -169,7 +168,7 @@ function SearchInput() {
           </div>
         </PopoverTrigger>
         <PopoverContent
-          className="w-2xl p-0"
+          className="md:w-2xl p-0"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <Command>

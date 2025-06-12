@@ -94,7 +94,7 @@ const PageContent = () => {
 
   return (
     <div className="flex items-center justify-center w-full font-[family-name:var(--font-geist-sans)]">
-      <main className="w-full max-w-[1440px] px-20 py-10">
+      <main className="w-full max-w-[1440px] md:px-20 px-6 py-10">
         <div className="flex flex-col md:flex-row gap-4 mb-8 items-center sticky top-4 bg-background/80 backdrop-blur-md z-10 p-4 rounded-lg border">
           <div className="flex-grow">
             <p className="text-muted-foreground">
@@ -146,8 +146,13 @@ const PageContent = () => {
               value={`${sortBy}-${sortOrder}`}
               onValueChange={(value) => {
                 const [newSortBy, newSortOrder] = value.split("-");
-                handleUrlUpdate("sortBy", newSortBy);
-                handleUrlUpdate("sortOrder", newSortOrder);
+                const currentParams = new URLSearchParams(
+                  searchParams.toString()
+                );
+                currentParams.set("sortBy", newSortBy);
+                currentParams.set("sortOrder", newSortOrder);
+                currentParams.set("page", "1"); // Reset page when sorting
+                router.push(`${pathname}?${currentParams.toString()}`);
               }}
             >
               <SelectTrigger className="w-full md:w-[180px]">

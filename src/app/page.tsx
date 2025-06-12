@@ -2,8 +2,8 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import ProductCard from "@/components/product/ProductCard";
-import { SkeletonCard } from "@/components/Skeleton/SkeletonCard";
-import { PaginationControls } from "@/components/Pagination/PaginationControls";
+import { SkeletonCard } from "@/components/skeleton/SkeletonCard";
+import { PaginationControls } from "@/components/pagination/PaginationControls";
 import {
   Select,
   SelectContent,

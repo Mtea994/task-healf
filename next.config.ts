@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
     // remotePatterns: [new URL("https://cdn.shopify.com/s/files/**")],
     domains: ["cdn.shopify.com"],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;

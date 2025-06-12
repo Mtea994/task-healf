@@ -1,5 +1,5 @@
 // interface for the FEATURED_IMAGE object
-interface FeaturedImage {
+export interface FeaturedImage {
   alt_text: string | "";
   height: number;
   id: string;

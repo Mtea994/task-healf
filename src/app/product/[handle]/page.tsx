@@ -7,6 +7,8 @@ import { ArrowLeft, BookmarkIcon, ShoppingCart } from "lucide-react";
 import { getProductByHandle } from "@/lib/data";
 import { formatPrice } from "@/lib/utils";
 
+// dynamic meta data to be added.
+
 export default async function ProductPage({
   params,
 }: {

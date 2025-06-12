@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ShoppingBag, Search, X } from "lucide-react";
 import SearchInput from "../search/SearchInput";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+// import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 function LayoutNavigation() {

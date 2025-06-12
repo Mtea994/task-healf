@@ -1,5 +1,6 @@
-import { Input } from "@/components/ui/input";
+// import { Input } from "@/components/ui/input";
 import { ShoppingBag } from "lucide-react";
+import SearchInput from "../search/SearchInput";
 
 function LayoutNavigation() {
   return (
@@ -9,10 +10,11 @@ function LayoutNavigation() {
           <h4 className="text-background font-semibold text-2xl">Logo</h4>
         </div>
         <div>
-          <Input
+          {/* <Input
             className="bg-background w-2xl"
             placeholder="Search Products"
-          />
+          /> */}
+          <SearchInput />
         </div>
         <div>
           <ShoppingBag color="white" size={24} />

@@ -3,35 +3,43 @@ import { promises as fsPromises } from "fs";
 import neatCsv from "neat-csv";
 import { Product } from "@/types";
 
+interface RawCsvRow {
+  [key: string]: string;
+}
+
 let activeProductsCache: Product[] | null = null;
 let cacheInitializationPromise: Promise<Product[]> | null = null;
 
-const safeJsonParse = (str: any) => {
+const safeJsonParse = (str: unknown): unknown => {
   if (typeof str !== "string" || !str) {
     return str;
   }
   try {
     return JSON.parse(str);
-  } catch (e) {
+  } catch {
     return str;
   }
 };
 
-const processProductRow = (row: any): Product => {
+const processProductRow = (row: RawCsvRow): Product => {
   const seo = safeJsonParse(row.SEO);
   const priceRange = safeJsonParse(row.PRICE_RANGE_V2);
+  const seoData = seo as any;
+  const priceRangeData = priceRange as any;
   return {
     ID: row.ID,
-    TITLE: seo?.title || row.TITLE,
+    TITLE: seoData?.title || row.TITLE,
     VENDOR: row.VENDOR,
     STATUS: row.STATUS,
     PRODUCT_TYPE: row.PRODUCT_TYPE,
     TAGS: row.TAGS,
     BODY_HTML: row.BODY_HTML,
     HANDLE: row.HANDLE,
-    FEATURED_IMAGE: safeJsonParse(row.FEATURED_IMAGE),
-    PRODUCT_EXCERPT: seo?.description || null,
-    "Variant Price": parseFloat(priceRange?.min_variant_price?.amount) || 0,
+    FEATURED_IMAGE: safeJsonParse(
+      row.FEATURED_IMAGE
+    ) as Product["FEATURED_IMAGE"],
+    PRODUCT_EXCERPT: seoData?.description || null,
+    "Variant Price": parseFloat(priceRangeData?.min_variant_price?.amount) || 0,
   };
 };
 
@@ -49,7 +57,7 @@ export const initializeActiveProductsCache = (): Promise<Product[]> => {
     try {
       const filePath = path.join(process.cwd(), "public", "products.csv");
       const fileContents = await fsPromises.readFile(filePath, "utf8");
-      const allProductsRaw: any[] = await neatCsv(fileContents);
+      const allProductsRaw: RawCsvRow[] = await neatCsv(fileContents);
       const processedProducts = allProductsRaw.map(processProductRow);
       const activeProducts = processedProducts.filter(
         (p) =>

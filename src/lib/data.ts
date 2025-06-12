@@ -1,11 +1,14 @@
 import path from "path";
 import { promises as fsPromises } from "fs";
 import neatCsv from "neat-csv";
-import { Product } from "@/types";
+import { Product, FeaturedImage } from "@/types";
 
 interface RawCsvRow {
   [key: string]: string;
 }
+
+type SeoData = { title?: string; description?: string | null };
+type PriceRangeData = { min_variant_price?: { amount?: string } };
 
 let activeProductsCache: Product[] | null = null;
 let cacheInitializationPromise: Promise<Product[]> | null = null;
@@ -22,24 +25,27 @@ const safeJsonParse = (str: unknown): unknown => {
 };
 
 const processProductRow = (row: RawCsvRow): Product => {
-  const seo = safeJsonParse(row.SEO);
-  const priceRange = safeJsonParse(row.PRICE_RANGE_V2);
-  const seoData = seo as any;
-  const priceRangeData = priceRange as any;
+  const seo = safeJsonParse(row.SEO) as SeoData;
+  const priceRange = safeJsonParse(row.PRICE_RANGE_V2) as PriceRangeData;
+  const featuredImage = safeJsonParse(row.FEATURED_IMAGE);
+
   return {
     ID: row.ID,
-    TITLE: seoData?.title || row.TITLE,
+    TITLE: seo?.title || row.TITLE,
     VENDOR: row.VENDOR,
     STATUS: row.STATUS,
     PRODUCT_TYPE: row.PRODUCT_TYPE,
     TAGS: row.TAGS,
     BODY_HTML: row.BODY_HTML,
     HANDLE: row.HANDLE,
-    FEATURED_IMAGE: safeJsonParse(
-      row.FEATURED_IMAGE
-    ) as Product["FEATURED_IMAGE"],
-    PRODUCT_EXCERPT: seoData?.description || null,
-    "Variant Price": parseFloat(priceRangeData?.min_variant_price?.amount) || 0,
+    // Type assertion to ensure the final object matches the Product type
+    FEATURED_IMAGE:
+      typeof featuredImage === "object" && featuredImage !== null
+        ? (featuredImage as FeaturedImage)
+        : null,
+    PRODUCT_EXCERPT: seo?.description || null,
+    // Safely access nested property without using 'any'
+    "Variant Price": parseFloat(priceRange?.min_variant_price?.amount || "0"),
   };
 };
 
